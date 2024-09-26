@@ -1,0 +1,56 @@
+services:
+    app:
+        image: php:8.2.0-fpm
+        container_name: laravel_app
+        working_dir: /var/www/html
+        volumes:
+            - ./:/var/www/html
+        networks:
+            - laravel_network
+        depends_on:
+            - postgres
+        environment:
+            - DB_CONNECTION=pgsql
+            - DB_HOST=postgres
+            - DB_PORT=5432
+            - DB_DATABASE=todo-app
+            - DB_USERNAME=admin
+            - DB_PASSWORD=password
+
+    # Nginx Web Server
+    webserver:
+        image: nginx:alpine
+        container_name: nginx_webserver
+        restart: unless-stopped
+        ports:
+            - "8085:80"
+        volumes:
+            - ./:/var/www/html
+            - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+        depends_on:
+            - app
+        networks:
+            - laravel_network
+
+    # Postgres Database
+    postgres:
+        image: postgres:16.4
+        container_name: todo-app-postgres
+        volumes:
+            - "postgredata:/data/db"
+        environment:
+            - POSTGRES_USER=admin
+            - POSTGRES_PASSWORD=password
+            - POSTGRES_DB=todo-app
+        ports:
+            - "5432:5432"
+        networks:
+            - laravel_network
+
+networks:
+    laravel_network:
+        driver: bridge
+
+volumes:
+    postgredata:
+        driver: local

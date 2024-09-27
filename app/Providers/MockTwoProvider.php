@@ -7,7 +7,7 @@ use Illuminate\Support\ServiceProvider;
 
 class MockTwoProvider extends ServiceProvider
 {
-    protected $url = 'http://run.mocky.io/v3/32d08d65-83b6-424f-9afb-519863b0ed09';
+    protected $url = 'http://run.mocky.io/v3/798f4d2d-3e9d-4517-983f-fff15cc9a5bb';
 
     public function __construct($app)
     {

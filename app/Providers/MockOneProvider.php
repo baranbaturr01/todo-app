@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Http;
 
 class MockOneProvider extends ServiceProvider
 {
-    protected string $url = 'http://run.mocky.io/v3/3d2e8a4d-1a99-456a-b16e-5c288e8d2b83';
+    protected string $url = 'http://run.mocky.io/v3/37a45282-2c37-4114-9669-4e65e600f739';
 
     public function __construct($app)
     {

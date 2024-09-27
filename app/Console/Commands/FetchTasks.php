@@ -2,10 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Factories\TaskProviderFactory;
-use App\Models\Task;
+use App\Facades\TaskFacade;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Http;
 
 class FetchTasks extends Command
 {
@@ -25,36 +23,19 @@ class FetchTasks extends Command
 
     /**
      * Execute the console command.
+     *
      * @throws \Exception
      */
     public function handle()
     {
         $this->info('Fetching tasks from APIs...');
-        $this->fetchAndStoreTasks('mock-one', 'value', 'estimated_duration');
-        $this->fetchAndStoreTasks('mock-two', 'zorluk', 'sure');
-        $this->info('All tasks fetched and stored successfully.');
-    }
 
-
-    /**
-     * @throws \Exception
-     */
-    public function fetchAndStoreTasks($providerName, $valueKey, $durationKey)
-    {
-        $provider = TaskProviderFactory::create($providerName);
-        $tasks = $provider->getTasks();
-        if (empty($tasks)) {
-            $this->warn("No tasks found from {$providerName}.");
-            return;
+        try {
+            TaskFacade::fetchTasksFromProviders();
+            $this->info('All tasks fetched and stored successfully.');
+        } catch (\Exception $e) {
+            $this->error('Error fetching tasks: ' . $e->getMessage());
+            \Log::error('Error fetching tasks: ' . $e->getMessage());
         }
-        foreach ($tasks as $task) {
-            Task::create([
-                'value' => $task[$valueKey],
-                'estimated_duration' => $task[$durationKey],
-            ]);
-        }
-        $this->info("Tasks from {$providerName} fetched and stored successfully.");
     }
 }
-
-

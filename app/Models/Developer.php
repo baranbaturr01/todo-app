@@ -14,4 +14,9 @@ class Developer extends Model
     protected $table = 'developers';
     protected $primaryKey = 'id';
     protected $fillable = ['dev_name', 'capacity', 'weekly_hours'];
+
+    public function getWeeklyCapacityAttribute()
+    {
+        return $this->capacity * $this->weekly_hours;
+    }
 }

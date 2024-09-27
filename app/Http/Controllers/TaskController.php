@@ -2,15 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\GreedyTaskDistribution;
 use App\Services\TaskDistributor;
 
 class TaskController extends Controller
 {
 
+    protected $taskDistributor;
 
-    public function index(TaskDistributor $distributor)
+    public function __construct()
     {
-        $assignments = $distributor->distributeTasks();
-        return view('assignments', compact('assignments'));
+        $this->taskDistributor = new TaskDistributor(new GreedyTaskDistribution());
+    }
+
+    public function index()
+    {
+        $result = $this->taskDistributor->distributeTasks();
+        $assignments = $result['assignments'];
+        $totalWeeks = $result['total_weeks'];
+        return view('assignments', compact('assignments', 'totalWeeks'));
     }
 }

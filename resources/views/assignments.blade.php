@@ -9,11 +9,13 @@
 <body>
 <div class="container mt-5">
     <h1>Weekly Task Assignments</h1>
+    <h2>Minimum total weeks to complete all tasks: {{ $totalWeeks }} weeks</h2>
 
     @foreach ($assignments as $assignment)
         <div class="card mt-3">
             <div class="card-header">
-                {{ $assignment['developer']->name }} - Total Hours: {{ $assignment['total_hours'] }}
+                Developer {{ $assignment['developer']->id }} - Total
+                Hours: {{ number_format($assignment['total_hours'], 2) }}
             </div>
             <ul class="list-group list-group-flush">
                 @foreach ($assignment['tasks'] as $task)
